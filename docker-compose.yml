@@ -1,0 +1,103 @@
+version: "3"
+
+services:
+  app:
+    env_file:
+      - .env
+    container_name: ${DOCKER_CONTAINER_NAME}_APP
+    build:
+      context: docker/local/app
+      args:
+        - USER_ID=${DOCKER_APP_USER_ID}
+        - GROUP_ID=${DOCKER_APP_GROUP_ID}
+        - APP_ENV=${APP_ENV}
+        - PHP_VERSION=${DOCKER_APP_PHP_VERSION}
+    restart: on-failure
+    working_dir: /var/www/app
+    tty: true
+    volumes:
+      - ./:/var/www/app
+    networks:
+      - app
+    depends_on:
+      - database
+      - cache
+  database:
+    container_name: ${DOCKER_CONTAINER_NAME}_DATABASE
+    env_file:
+      - .env
+    tty: true
+    image: postgres:18-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./containers/data/database:/var/lib/postgresql
+    ports:
+      - ${DOCKER_DATABASE_PUBLIC_DB_PORT}:5432
+    networks:
+      - app
+    command: [ "postgres", "-c", "log_statement=all", "-c", "log_destination=stderr" ]
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${DB_USERNAME}", "-d", "${DB_DATABASE}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  server:
+    container_name: ${DOCKER_CONTAINER_NAME}_SERVER
+    tty: true
+    env_file:
+      - .env
+    image: nginx:1-alpine
+    restart: on-failure
+    depends_on:
+      - app
+    ports:
+      - ${DOCKER_SERVER_PORT}:80
+    volumes:
+      - ./:/var/www/app
+      - ./containers/logs/server/:/var/log/nginx/
+      - ./docker/local/server/config/:/etc/nginx/conf.d/
+    networks:
+      - app
+    environment:
+      - SERVER_HOSTNAME=${DOCKER_SERVER_HOSTNAME}
+  cache:
+    container_name: ${DOCKER_CONTAINER_NAME}_REDIS
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks:
+      - app
+    volumes:
+      - ./containers/data/cache:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  queue_0:
+    container_name: ${DOCKER_CONTAINER_NAME}_QUEUE_0
+    env_file:
+      - .env
+    build:
+      context: docker/local/queue
+      args:
+        - APP_ENV=${APP_ENV}
+        - PHP_VERSION=${DOCKER_APP_PHP_VERSION}
+    restart: on-failure
+    command: [ "php", "artisan", "queue:work", "--timeout=30" ]
+    working_dir: /var/www/app
+    tty: true
+    volumes:
+      - ./:/var/www/app
+    networks:
+      - app
+    depends_on:
+      - database
+      - cache
+
+networks:
+  app:
+    driver: bridge
