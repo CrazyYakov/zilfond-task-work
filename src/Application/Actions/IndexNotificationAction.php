@@ -14,7 +14,7 @@ class IndexNotificationAction
     {
         return Notification::query()
             ->where('recepient_id', $dto->recepientId)
-            ->when($dto->status, fn(Builder $query, NotificationStatusEnum $status) => $query->where('status', $status->name))
+            ->when($dto->status, fn(Builder $query, NotificationStatusEnum $status) => $query->where('status', $status->value))
             ->when($dto->transport, fn(Builder $query, string $transport) => $query->where('transport', $transport))
             ->simplePaginate();
     }

@@ -2,11 +2,11 @@
 
 namespace App\ValuesObjects;
 
-enum NotificationStatusEnum
+enum NotificationStatusEnum: string
 {
-    case ERROR;
+    case ERROR = 'error';
 
-    case PROGRESS;
+    case PROGRESS = 'progress';
 
-    case SENT;
+    case SENT = 'sent';
 }
