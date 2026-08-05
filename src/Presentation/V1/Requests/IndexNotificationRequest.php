@@ -27,7 +27,6 @@ class IndexNotificationRequest extends FormRequest
                 'exists:users,id',
             ],
             'transport' => [
-                'required',
                 'string',
                 static function (string $attribute, mixed $value, \Closure $fail) use ($service) {
                     if (! $service->exists($value)) {
