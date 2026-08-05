@@ -34,7 +34,8 @@ RUN docker-php-ext-enable pdo pgsql
 
 RUN if [ ${APP_ENV} != "production" ]; then \
       apk add --no-cache $PHPIZE_DEPS linux-headers; \
-      pecl install xdebug && docker-php-ext-enable xdebug;  \
+      pie install xdebug/xdebug; \
+      pie install pecl/pcov; \
     fi
 
 RUN addgroup -g ${GROUP_ID} www && \
