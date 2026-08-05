@@ -29,8 +29,3 @@ RUN curl -fL --output /usr/local/bin/pie https://github.com/php/pie/releases/lat
 RUN docker-php-ext-install pdo pdo_pgsql pgsql && \
     pie install phpredis/phpredis
 RUN docker-php-ext-enable pdo pgsql
-
-RUN if [ ${APP_ENV} != "production" ]; then \
-      apk add --no-cache $PHPIZE_DEPS linux-headers; \
-      pecl install xdebug && docker-php-ext-enable xdebug;  \
-    fi
