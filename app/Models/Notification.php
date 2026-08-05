@@ -23,13 +23,6 @@ use Illuminate\Support\Carbon;
 class Notification extends Model
 {
     use HasFactory;
-    
-    protected $fillable = [
-        'text',
-        'recepinet_id',
-        'transport',
-    ];
-
     protected $casts = [
         'status' => NotificationStatusEnum::class,
     ];
