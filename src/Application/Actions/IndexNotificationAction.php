@@ -10,6 +10,9 @@ use Notification\Application\Dto\IndexNotificationDto;
 
 class IndexNotificationAction
 {
+    /**
+     * @return Paginator<int, Notification>
+     */
     public function execute(IndexNotificationDto $dto): Paginator
     {
         return Notification::query()

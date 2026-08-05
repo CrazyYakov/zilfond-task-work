@@ -5,14 +5,8 @@ includes:
 parameters:
 
     paths:
-#        - src/
+        - src/
         - app/
 
     # Level 10 is the highest level
     level: 7
-
-#    ignoreErrors:
-#        - '#PHPDoc tag @var#'
-#
-#    excludePaths:
-#        - ./*/*/FileToBeExcluded.php

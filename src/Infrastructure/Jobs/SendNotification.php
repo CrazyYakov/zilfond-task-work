@@ -12,7 +12,7 @@ class SendNotification implements ShouldQueue
 {
     use Queueable;
 
-    public $tries = 5;
+    public int $tries = 5;
 
     public function __construct(
         private NotificationCreated $notificationCreated

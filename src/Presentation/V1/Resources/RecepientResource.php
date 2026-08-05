@@ -2,17 +2,22 @@
 
 namespace Notification\Presentation\V1\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Override;
 
+/**
+ * @mixin User
+ */
 class RecepientResource extends JsonResource
 {
-    #[Override]
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
+            'id' => $this->getKey(),
             'name' => $this->name,
         ];
     }

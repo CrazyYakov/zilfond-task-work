@@ -2,10 +2,17 @@
 
 namespace Notification\Presentation\V1\Resources;
 
+use App\Models\Notification;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Notification
+ */
 class NotificationResource extends JsonResource
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray($request): array
     {
         return [

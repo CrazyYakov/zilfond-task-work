@@ -14,6 +14,9 @@ use Notification\Infrastructure\Services\TransportService;
  */
 class IndexNotificationRequest extends FormRequest
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function rules(TransportService $service): array
     {
         return [

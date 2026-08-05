@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\ValuesObjects\NotificationStatusEnum;
+use Database\Factories\NotificationFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +22,7 @@ use Illuminate\Support\Carbon;
  */
 class Notification extends Model
 {
+    /** @use HasFactory<NotificationFactory> */
     use HasFactory;
 
     protected $casts = [
@@ -31,6 +33,9 @@ class Notification extends Model
         'status' => NotificationStatusEnum::PROGRESS,
     ];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function recipient(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -13,6 +13,9 @@ use Notification\Infrastructure\Services\TransportService;
  */
 class StoreNotificationRequest extends FormRequest
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function rules(TransportService $transportService): array
     {
         return [
