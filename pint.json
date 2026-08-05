@@ -1,0 +1,16 @@
+{
+    "preset": "laravel",
+    "exclude": [
+        "containers/",
+        "vendor/",
+        "storage"
+    ],
+    "rules": {
+        "php_unit_method_casing": {
+            "case": "camel_case"
+        },
+        "concat_space": {
+            "spacing": "one"
+        }
+    }
+}
