@@ -20,8 +20,8 @@ class NotificationFactory extends Factory
     {
         return [
             'text' => $this->faker->text(500),
-            'status' => $this->faker->randomElements(NotificationStatusEnum::cases()),
-            'transport' => $this->faker->randomElements(['telegram', 'email']),
+            'status' => $this->faker->randomElement(NotificationStatusEnum::cases()),
+            'transport' => $this->faker->randomElement(['telegram', 'email']),
         ];
     }
 }
