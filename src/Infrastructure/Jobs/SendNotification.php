@@ -18,7 +18,7 @@ class SendNotification implements ShouldQueue
         private Notification $notification
     ) {}
 
-    public function hanlde(TransportService $transportService): void
+    public function handle(TransportService $transportService): void
     {
         $transport = $transportService->create($this->notification->transport);
 
