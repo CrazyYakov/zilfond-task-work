@@ -2,10 +2,10 @@
 
 namespace Notification\Infrastructure\Jobs;
 
-use App\Models\Notification;
 use App\ValuesObjects\NotificationStatusEnum;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Notification\Application\Events\NotificationCreated;
 use Notification\Infrastructure\Services\TransportService;
 
 class SendNotification implements ShouldQueue
@@ -15,24 +15,28 @@ class SendNotification implements ShouldQueue
     public $tries = 5;
 
     public function __construct(
-        private Notification $notification
+        private NotificationCreated $notificationCreated
     ) {}
 
     public function handle(TransportService $transportService): void
     {
-        $transport = $transportService->create($this->notification->transport);
+        $notification = $this->notificationCreated->notification;
 
-        $transport->send($this->notification->text, $this->notification->recipient_id);
+        $transport = $transportService->create($notification->transport);
 
-        $this->notification->status = NotificationStatusEnum::SENT;
+        $transport->send($notification->text, $notification->recipient_id);
 
-        $this->notification->save();
+        $notification->status = NotificationStatusEnum::SENT;
+
+        $notification->save();
     }
 
     public function failed(?\Throwable $exception): void
     {
-        $this->notification->status = NotificationStatusEnum::ERROR;
+        $notification = $this->notificationCreated->notification;
 
-        $this->notification->save();
+        $notification->status = NotificationStatusEnum::ERROR;
+
+        $notification->save();
     }
 }

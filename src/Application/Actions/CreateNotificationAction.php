@@ -6,7 +6,7 @@ namespace Notification\Application\Actions;
 
 use App\Models\Notification;
 use Notificaiton\Application\Dto\CreateNotificationDto;
-use Notification\Infrastructure\Jobs\SendNotification;
+use Notification\Application\Events\NotificationCreated;
 
 class CreateNotificationAction
 {
@@ -18,7 +18,7 @@ class CreateNotificationAction
         $notification->transport = $notificationDto->transport;
         $notification->save();
 
-        SendNotification::dispatch($notification);
+        NotificationCreated::dispatch($notification);
 
         return $notification;
     }

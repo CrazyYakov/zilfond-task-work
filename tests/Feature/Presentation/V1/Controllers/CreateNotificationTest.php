@@ -3,9 +3,8 @@
 namespace Tests\Feature\Presentation\V1\Controllers;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Queue;
-use Notification\Infrastructure\Jobs\SendNotification;
-use Override;
+use Illuminate\Support\Facades\Event;
+use Notification\Application\Events\NotificationCreated;
 use Tests\TestCase;
 
 class CreateNotificationTest extends TestCase
@@ -14,7 +13,7 @@ class CreateNotificationTest extends TestCase
 
     public function testSuccessCreate(): void
     {
-        Queue::fake(SendNotification::class);
+        Event::fake(NotificationCreated::class);
 
         $recipient = User::factory()->create();
 
@@ -28,7 +27,7 @@ class CreateNotificationTest extends TestCase
 
         $response->assertCreated();
 
-        Queue::assertPushed(SendNotification::class);
+        Event::assertDispatched(NotificationCreated::class);
 
         $this->assertDatabaseHas('notifications', [
             'text' => 'test message',

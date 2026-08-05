@@ -8,6 +8,7 @@ use App\ValuesObjects\NotificationStatusEnum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Mockery\MockInterface;
+use Notification\Application\Events\NotificationCreated;
 use Notification\Infrastructure\Contracts\TransportContract;
 use Notification\Infrastructure\Jobs\SendNotification;
 use Notification\Infrastructure\Services\TransportService;
@@ -38,7 +39,9 @@ class SendNotificationTest extends TestCase
                 ->andReturn($mockTransport);
         });
 
-        SendNotification::dispatchSync($notification);
+        $notificationCreated = new NotificationCreated($notification);
+
+        SendNotification::dispatchSync($notificationCreated);
 
         $this->assertDatabaseHas('notifications', [
             'id' => $notification->id,
@@ -70,7 +73,9 @@ class SendNotificationTest extends TestCase
         });
 
         try {
-            SendNotification::dispatchSync($notification);
+            $notificationCreated = new NotificationCreated($notification);
+
+            SendNotification::dispatchSync($notificationCreated);
         } catch (\Throwable $exception) {
             $this->assertEquals('Transport error', $exception->getMessage());
         }
