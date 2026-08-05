@@ -49,7 +49,7 @@ class NotificationController
 
         $pagination = $this->indexNotficationAction->execute($dto);
 
-        $pagination->through(fn(Notification $notification) => new NotificationResource($notification));
+        $pagination->through(fn (Notification $notification) => new NotificationResource($notification));
 
         return $pagination;
     }

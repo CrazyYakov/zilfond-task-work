@@ -5,14 +5,11 @@ namespace Tests\Feature\Infrastructure\Jobs;
 use App\Models\Notification;
 use App\Models\User;
 use App\ValuesObjects\NotificationStatusEnum;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Mockery\MockInterface;
 use Notification\Application\Events\NotificationCreated;
 use Notification\Infrastructure\Contracts\TransportContract;
 use Notification\Infrastructure\Jobs\SendNotification;
 use Notification\Infrastructure\Services\TransportService;
-use PHPUnit\Framework\MockObject\MockObject;
 use Tests\TestCase;
 
 class SendNotificationTest extends TestCase

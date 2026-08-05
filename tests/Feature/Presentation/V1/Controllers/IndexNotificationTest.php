@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Presentation\V1\Controllers;
 
+use App\Models\Notification;
+use App\Models\User;
 use App\ValuesObjects\NotificationStatusEnum;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
@@ -31,9 +31,9 @@ class IndexNotificationTest extends TestCase
     #[DataProvider('payloads')]
     public function testSuccess(array $payload = []): void
     {
-        $recipient = \App\Models\User::factory()->create();
+        $recipient = User::factory()->create();
 
-        \App\Models\Notification::factory()
+        Notification::factory()
             ->for($recipient, 'recipient')
             ->count(30)
             ->create();
@@ -47,17 +47,17 @@ class IndexNotificationTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function testSuccessFilterStatus(): void 
+    public function testSuccessFilterStatus(): void
     {
-        $recipient = \App\Models\User::factory()->create();
+        $recipient = User::factory()->create();
 
-        \App\Models\Notification::factory()
+        Notification::factory()
             ->for($recipient, 'recipient')
             ->set('status', NotificationStatusEnum::SENT)
             ->count(10)
             ->create();
 
-        \App\Models\Notification::factory()
+        Notification::factory()
             ->for($recipient, 'recipient')
             ->set('status', NotificationStatusEnum::ERROR)
             ->count(20)

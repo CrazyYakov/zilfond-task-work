@@ -4,7 +4,7 @@ namespace Notification\Application\Dto;
 
 use App\ValuesObjects\NotificationStatusEnum;
 
-readonly class IndexNotificationDto 
+readonly class IndexNotificationDto
 {
     public function __construct(
         public int $recipientId,

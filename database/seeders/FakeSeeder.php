@@ -19,7 +19,7 @@ class FakeSeeder extends Seeder
         $users = User::factory(10)->create();
 
         Notification::factory()
-            ->sequence(fn() => [
+            ->sequence(fn () => [
                 'recipient_id' => $users->random()->id,
             ])
             ->create();

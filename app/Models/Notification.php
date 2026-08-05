@@ -17,12 +17,12 @@ use Illuminate\Support\Carbon;
  * @property string $transport
  * @property-read Carbon $created_at
  * @property-read Carbon $updated_at
- * 
  * @property-read User $recipient
  */
 class Notification extends Model
 {
     use HasFactory;
+
     protected $casts = [
         'status' => NotificationStatusEnum::class,
     ];

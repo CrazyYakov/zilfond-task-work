@@ -13,7 +13,7 @@ use Notification\Infrastructure\Services\TransportService;
  */
 class StoreNotificationRequest extends FormRequest
 {
-    public function rules(TransportService $transportService): array 
+    public function rules(TransportService $transportService): array
     {
         return [
             'text' => [
@@ -37,5 +37,4 @@ class StoreNotificationRequest extends FormRequest
             ],
         ];
     }
-    
 }
