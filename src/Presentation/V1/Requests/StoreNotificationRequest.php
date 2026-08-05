@@ -8,7 +8,7 @@ use Notification\Infrastructure\Services\TransportService;
 
 /**
  * @property-read string $text
- * @property-read int $recepientId
+ * @property-read int $recipientId
  * @property-read string $transport
  */
 class StoreNotificationRequest extends FormRequest
@@ -21,7 +21,7 @@ class StoreNotificationRequest extends FormRequest
                 'required',
                 'max:500',
             ],
-            'recepientId' => [
+            'recipientId' => [
                 'required',
                 'integer',
                 'exists:users,id',

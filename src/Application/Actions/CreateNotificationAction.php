@@ -14,7 +14,7 @@ class CreateNotificationAction
     {
         $notification = new Notification();
         $notification->text = $notificationDto->text;
-        $notification->recepient_id = $notificationDto->recepientId;
+        $notification->recipient_id = $notificationDto->recipientId;
         $notification->transport = $notificationDto->transport;
         $notification->save();
 

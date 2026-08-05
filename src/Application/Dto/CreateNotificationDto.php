@@ -6,7 +6,7 @@ readonly class CreateNotificationDto
 {
     public function __construct(
         public string $text,
-        public int $recepientId,
+        public int $recipientId,
         public string $transport,
     ) {}
 }

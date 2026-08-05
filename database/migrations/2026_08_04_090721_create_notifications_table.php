@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->string('text', 500);
-            $table->foreignId('recepient_id')->constrained('users');
+            $table->foreignId('recipient_id')->constrained('users');
             $table->string('transport');
             $table->string('status');
             $table->timestamps();
 
-            $table->index(['recepient_id', 'status']);
-            $table->index(['recepient_id', 'transport']);
+            $table->index(['recipient_id', 'status']);
+            $table->index(['recipient_id', 'transport']);
         });
     }
 

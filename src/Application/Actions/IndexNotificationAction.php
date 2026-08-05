@@ -13,7 +13,7 @@ class IndexNotificationAction
     public function execute(IndexNotificationDto $dto): Paginator
     {
         return Notification::query()
-            ->where('recepient_id', $dto->recepientId)
+            ->where('recipient_id', $dto->recipientId)
             ->when($dto->status, fn(Builder $query, NotificationStatusEnum $status) => $query->where('status', $status->value))
             ->when($dto->transport, fn(Builder $query, string $transport) => $query->where('transport', $transport))
             ->simplePaginate();

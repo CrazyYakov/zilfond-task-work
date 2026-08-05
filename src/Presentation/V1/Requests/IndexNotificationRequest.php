@@ -9,7 +9,7 @@ use Notification\Infrastructure\Services\TransportService;
 
 /**
  * @property-read string $status
- * @property-read int $recepientId
+ * @property-read int $recipientId
  * @property-read string $transport
  */
 class IndexNotificationRequest extends FormRequest
@@ -21,7 +21,7 @@ class IndexNotificationRequest extends FormRequest
                 'string',
                 Rule::enum(NotificationStatusEnum::class),
             ],
-            'recepientId' => [
+            'recipientId' => [
                 'required',
                 'integer',
                 'exists:users,id',

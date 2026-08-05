@@ -8,7 +8,7 @@ use Override;
 final class EmailTransport implements TransportContract
 {
     #[Override]
-    public function send(string $text, int $recepientId): void
+    public function send(string $text, int $recipientId): void
     {
         // ...
     }

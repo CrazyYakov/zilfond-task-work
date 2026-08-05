@@ -4,5 +4,5 @@ namespace Notification\Infrastructure\Contracts;
 
 interface TransportContract
 {
-    public function send(string $text, int $recepientId): void;
+    public function send(string $text, int $recipientId): void;
 }

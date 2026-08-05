@@ -25,7 +25,7 @@ class NotificationController
     {
         $dto = new CreateNotificationDto(
             text: $request->text,
-            recepientId: $request->recepientId,
+            recipientId: $request->recipientId,
             transport: $request->transport,
         );
 
@@ -42,7 +42,7 @@ class NotificationController
     public function index(IndexNotificationRequest $request): Jsonable
     {
         $dto = new IndexNotificationDto(
-            recepientId: $request->recepientId,
+            recipientId: $request->recipientId,
             status: $request->enum('status', NotificationStatusEnum::class),
             transport: $request->transport,
         );

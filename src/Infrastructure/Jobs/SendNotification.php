@@ -22,7 +22,7 @@ class SendNotification implements ShouldQueue
     {
         $transport = $transportService->create($this->notification->transport);
 
-        $transport->send($this->notification->text, $this->notification->recepient_id);
+        $transport->send($this->notification->text, $this->notification->recipient_id);
 
         $this->notification->status = NotificationStatusEnum::SENT;
 

@@ -13,12 +13,12 @@ use Illuminate\Support\Carbon;
  * @property string $text
  * @property string $name
  * @property NotificationStatusEnum $status
- * @property int $recepient_id
+ * @property int $recipient_id
  * @property string $transport
  * @property-read Carbon $created_at
  * @property-read Carbon $updated_at
  * 
- * @property-read User $recepient
+ * @property-read User $recipient
  */
 class Notification extends Model
 {
@@ -31,7 +31,7 @@ class Notification extends Model
         'status' => NotificationStatusEnum::PROGRESS,
     ];
 
-    public function recepient(): BelongsTo
+    public function recipient(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

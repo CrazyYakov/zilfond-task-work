@@ -8,7 +8,7 @@ use Override;
 final class ErrorTransport implements TransportContract
 {
     #[Override]
-    public function send(string $text, int $recepientId): void
+    public function send(string $text, int $recipientId): void
     {
         throw new \Exception('Error send');
     }
