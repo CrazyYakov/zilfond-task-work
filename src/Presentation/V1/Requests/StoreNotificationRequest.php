@@ -17,7 +17,7 @@ class StoreNotificationRequest extends FormRequest
     {
         return [
             'text' => [
-                'text',
+                'string',
                 'required',
                 'max:500',
             ],
