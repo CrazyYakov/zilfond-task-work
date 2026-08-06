@@ -1,59 +1,120 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Тестовое задание
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Это тестовое задание от агенства недвижимости "Жилфонд": Реализовать сервис уведомлений, который будет уведомлять пользователя через разные каналы по принципу REST.
 
-## About Laravel
+## Задачи
+1. Реализация REST API для уведомлений.
+2. Реализация гарантии доставки уведомлений.
+3. Написать функциональные и Unit тесты.
+4. Добавить и настроить PHPStan с минимальным уровнем 5, а также любой Code style.
+5. Описать как установить приложение.
+6. Описать архитектурные решения.
+7. Как улучшить проект для Production.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+# Работа с сервисом
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 1. Установка приложения
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```bash
+cp .env.example .env
 
-## Learning Laravel
+docker compose up -d
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+docker compose exec app composer install
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+docker compose exec app php artisan key:generate
+```
 
-## Laravel Sponsors
+### 2. Тестирование и анализ кода
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+docker compose exec app php artisan test --coverage --min=80
 
-### Premium Partners
+docker compose exec app ./vendor/bin/pint --test
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+docker compose exec app ./vendor/bin/phpstan analyze --memory-limit=256m
+```
 
-## Contributing
+### 3. Добавление новых каналов связи
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Для работы с новыми каналами связи необходимо добавить новый класс с префиксом `Transport` и реализовать интерфейс `Notification\Infrastructure\Contracts\TransportContract` в папке `src/Infrastructure/Transports`.
 
-## Code of Conduct
+В Качестве примера добавим `MaxTransport`, а значит в запросе будет указыватся канал связи `Max`. Регистр букв также учитывается. 
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```php
+namespace Notification\Infrastructure\Transports;
 
-## Security Vulnerabilities
+use Notification\Infrastructure\Contracts\TransportContract;
+use Override;
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+final class MaxTransport implements TransportContract
+{
+    public function send(string $text, int $recipientId): void
+    {
+        // Реализация отправки сообщения в max
+    }
+}
+```
 
-## License
+### 4. REST API документация
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Чтобы просмотреть API документацию необходимо перейти по ссылке:
+
+http://localhost:8000/documentation
+
+# Принятые архитектурные решения
+
+Предположим что у нас есть монолит и мы решили его декомпозировать на микросервисы. В данном случае нам попало "под раздачу" **Сервис уведомлений**. Предположим что данный сервис относится к вспомогательному поддомену.
+
+Так как сервис уведомлений имеет одну модель "**Notification**", то для обозночения понятия границ мы можем использовать "**ограниченные контексты**". А значит у нас только один контекст - контекст уведомлений.
+
+## Модель бизнес-процесса
+
+Ниже представлена модель бизнес-процесса отправки уведомлений. Модель построена на основе **Event Storming** и четко указывает работу отправки уведомлений.
+
+![Event Storming](./docs/img/тз%20сервис%20уведомлений.png)
+
+## Тактическая реализия бизнес-логики
+
+Контекст уведомлений находится в папке `./src`. Паттерн для контеста используется "**активная запись**" (active record) и разделен на три слоя:
+
+**Application** - это прикладной слой, в котором описаны бизнес-процессы.
+
+**Infrastructure** - это слой, который предоставляет доступ к внешним сервисам (доступ к Telegram, Email).
+
+**Presentation** - слой, который предоставляет публичный интерфейс для клиента.
+
+Добавления слоя **Domain** нет необходимости так как наша структура данных имеет простую бизнес-логику.
+
+### Структура папки `src/`
+```
+.
+├── Application
+│   ├── Actions
+│   ├── Dto
+│   └── Events
+├── Infrastructure
+│   ├── Contracts
+│   ├── Factories
+│   ├── Jobs
+│   ├── Providers
+│   ├── Services
+│   └── Transports
+└── Presentation
+    └── V1
+        ├── Controllers
+        ├── Requests
+        └── Resources
+```
+
+## Гарантия доставки уведомления
+
+Для отправки уведомлений я воспользовался механизмом Laravel Queue. Данный инструмент гарантировано может повторно запустить задание если сообщение не будет доставлено.
+
+# Советы по улучшению проекта для Production
+
+Ниже представлены советы по работе с Production.
+
+1. Установка и настройка PHP расширения Opcache для кэширования PHP кода.
+2. Добавление проверки безопасности запросов (например Jwt-token).
+3. Добавление сервис логирования, чтобы можно было просмотреть ошибки отправки уведомлений.
