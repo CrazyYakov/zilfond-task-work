@@ -5,7 +5,36 @@ namespace Notification\Presentation\V1\Requests;
 use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Notification\Infrastructure\Services\TransportService;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(
+    schema: 'StoreNotificationRequest',
+    properties: [
+        new OA\Property(
+            property: 'text',
+            description: 'The text of the notification',
+            type: 'string',
+            example: 'This is a test notification',
+        ),
+        new OA\Property(
+            property: 'recipientId',
+            description: 'The ID of the recipient',
+            type: 'integer',
+            example: 1,
+        ),
+        new OA\Property(
+            property: 'transport',
+            description: 'The transport to use',
+            type: 'string',
+            example: 'Email',
+        ),
+    ],
+    required: [
+        'text',
+        'recipientId',
+        'transport',
+    ]
+)]
 /**
  * @property-read string $text
  * @property-read int $recipientId

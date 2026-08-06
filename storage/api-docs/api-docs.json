@@ -1,0 +1,215 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Notification API",
+        "description": "API for Notification",
+        "version": "1"
+    },
+    "paths": {
+        "/api/v1/notifications": {
+            "get": {
+                "tags": [
+                    "Notification"
+                ],
+                "description": "Paginate notifications",
+                "operationId": "28dd39ddca6ba43a0516290ccc49f4f0",
+                "parameters": [
+                    {
+                        "name": "recipientId",
+                        "in": "query",
+                        "description": "recipient id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "status",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "error",
+                                "progress",
+                                "sent"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "transport",
+                        "in": "query",
+                        "description": "transport",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Notification found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/NotificationResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Notification"
+                ],
+                "description": "Create a new notification",
+                "operationId": "2dfb86248fecdfe4ea6b4a3120c196e3",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreNotificationRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Notification created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotificationResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notifications/{notification}": {
+            "get": {
+                "tags": [
+                    "Notification"
+                ],
+                "description": "Find notificaiton",
+                "operationId": "201628993c921188b585f5876d031a3c",
+                "parameters": [
+                    {
+                        "name": "notification",
+                        "in": "path",
+                        "description": "Notification ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Notification found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotificationResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "StoreNotificationRequest": {
+                "required": [
+                    "text",
+                    "recipientId",
+                    "transport"
+                ],
+                "properties": {
+                    "text": {
+                        "description": "The text of the notification",
+                        "type": "string",
+                        "example": "This is a test notification"
+                    },
+                    "recipientId": {
+                        "description": "The ID of the recipient",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "transport": {
+                        "description": "The transport to use",
+                        "type": "string",
+                        "example": "Email"
+                    }
+                },
+                "type": "object"
+            },
+            "NotificationResource": {
+                "properties": {
+                    "id": {
+                        "description": "The id of the notification",
+                        "type": "integer"
+                    },
+                    "text": {
+                        "description": "The text of the notification",
+                        "type": "string"
+                    },
+                    "recipient": {
+                        "$ref": "#/components/schemas/RecepientResource"
+                    },
+                    "status": {
+                        "description": "The status of the notification",
+                        "enum": [
+                            "error",
+                            "progress",
+                            "sent"
+                        ]
+                    },
+                    "createdAt": {
+                        "description": "The created at of the notification",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "description": "The updated at of the notification",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "RecepientResource": {
+                "properties": {
+                    "id": {
+                        "description": "The id of the recepient",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "The name of the recepient",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Notification",
+            "description": "Notification API"
+        }
+    ]
+}
