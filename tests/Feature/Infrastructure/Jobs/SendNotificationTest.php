@@ -62,7 +62,7 @@ class SendNotificationTest extends TestCase
         $this->mock(TransportService::class, function (MockInterface $mock) use ($mockTransport) {
             $mock->shouldReceive('create')
                 ->once() // @phpstan-ignore-line
-                ->with('Test') 
+                ->with('Test')
                 ->andReturn($mockTransport);
         });
 

@@ -13,7 +13,6 @@ class IndexNotificationTest extends TestCase
     protected const string ROUTE_NAME = 'api.v1.notifications.index';
 
     /**
-     * 
      * @return array<string, array<string, mixed>>
      */
     public static function payloads(): array
@@ -33,7 +32,7 @@ class IndexNotificationTest extends TestCase
     }
 
     /**
-     * @param array<string, mixed> $payload
+     * @param  array<string, mixed>  $payload
      */
     #[DataProvider('payloads')]
     public function testSuccess(array $payload = []): void
