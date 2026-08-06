@@ -2,8 +2,6 @@ version: "3"
 
 services:
   app:
-    env_file:
-      - .env
     container_name: ${DOCKER_CONTAINER_NAME}_APP
     build:
       context: docker/local/app
@@ -24,8 +22,6 @@ services:
       - cache
   database:
     container_name: ${DOCKER_CONTAINER_NAME}_DATABASE
-    env_file:
-      - .env
     tty: true
     image: postgres:18-alpine
     restart: always
@@ -48,8 +44,6 @@ services:
   server:
     container_name: ${DOCKER_CONTAINER_NAME}_SERVER
     tty: true
-    env_file:
-      - .env
     image: nginx:1-alpine
     restart: on-failure
     depends_on:
@@ -79,8 +73,6 @@ services:
       retries: 20
   queue_0:
     container_name: ${DOCKER_CONTAINER_NAME}_QUEUE_0
-    env_file:
-      - .env
     build:
       context: docker/local/queue
       args:
