@@ -37,7 +37,7 @@ docker compose exec app ./vendor/bin/phpstan analyze --memory-limit=256m
 
 ### 3. Добавление новых каналов связи
 
-Для работы с новыми каналами связи необходимо добавить новый класс с префиксом `Transport` и реализовать интерфейс `Notification\Infrastructure\Contracts\TransportContract` в папке `src/Infrastructure/Transports`.
+Для работы с новыми каналами связи необходимо добавить новый класс с постфиксом `Transport` и реализовать интерфейс `Notification\Infrastructure\Contracts\TransportContract` в папке `src/Infrastructure/Transports`.
 
 В Качестве примера добавим `MaxTransport`, а значит в запросе будет указыватся канал связи `Max`. Регистр букв также учитывается. 
 
